@@ -23,6 +23,7 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl" className={cairo.variable} suppressHydrationWarning>
       <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes" />
         <ThemeScript />
       </head>
       <body className="font-cairo antialiased">

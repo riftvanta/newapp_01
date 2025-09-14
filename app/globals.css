@@ -56,9 +56,79 @@
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-cairo), sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   html {
     direction: rtl;
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+  }
+
+  /* Mobile-specific optimizations */
+  @media (max-width: 640px) {
+    html {
+      font-size: 14px;
+    }
+  }
+
+  /* Improve touch targets for mobile */
+  button, a, input, textarea, select {
+    min-height: 44px;
+    touch-action: manipulation;
+  }
+
+  /* RTL scrollbar improvements */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-100 dark:bg-gray-800;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-400 dark:bg-gray-600 rounded;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-500 dark:bg-gray-500;
+  }
+
+  /* Prevent horizontal overflow on mobile */
+  main {
+    overflow-x: hidden;
+  }
+
+  /* Better focus indicators for mobile */
+  *:focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary;
+  }
+
+  /* Bottom navigation safe area for devices with home indicator */
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* Glass morphism backdrop support */
+  @supports (backdrop-filter: blur(12px)) {
+    .backdrop-blur-lg {
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+  }
+
+  /* Smooth scale animation for nav items */
+  @keyframes nav-press {
+    0% { transform: scale(1); }
+    50% { transform: scale(0.95); }
+    100% { transform: scale(1); }
+  }
+
+  /* Active nav item animation */
+  .nav-active {
+    animation: nav-press 0.2s ease-out;
   }
 }

@@ -41,14 +41,14 @@ export function LoginForm() {
   }
 
   return (
-    <Card className="w-full max-w-md">
-      <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold text-center">تسجيل الدخول</CardTitle>
+    <Card className="w-full max-w-md mx-auto">
+      <CardHeader className="space-y-1 px-4 sm:px-6">
+        <CardTitle className="text-xl sm:text-2xl font-bold text-center">تسجيل الدخول</CardTitle>
         <CardDescription className="text-center">
           أدخل بيانات الدخول للوصول إلى لوحة التحكم
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-4 sm:px-6">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="username">اسم المستخدم</Label>
@@ -60,9 +60,12 @@ export function LoginForm() {
               onChange={(e) => setUsername(e.target.value)}
               required
               disabled={isLoading}
-              className="text-right"
+              className="text-right h-12 text-base"
               dir="rtl"
               autoComplete="username"
+              inputMode="text"
+              autoCapitalize="off"
+              autoCorrect="off"
             />
           </div>
           <div className="space-y-2">
@@ -75,9 +78,10 @@ export function LoginForm() {
               onChange={(e) => setPassword(e.target.value)}
               required
               disabled={isLoading}
-              className="text-right"
+              className="text-right h-12 text-base"
               dir="rtl"
               autoComplete="current-password"
+              inputMode="text"
             />
           </div>
           {error && (
@@ -87,7 +91,7 @@ export function LoginForm() {
           )}
           <Button
             type="submit"
-            className="w-full"
+            className="w-full h-12 text-base"
             disabled={isLoading}
           >
             {isLoading ? "جاري تسجيل الدخول..." : "دخول"}
