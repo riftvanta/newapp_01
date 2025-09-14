@@ -17,7 +17,7 @@ const config: Config = {
     },
     extend: {
       fontFamily: {
-        'cairo': ['Cairo', 'sans-serif'],
+        'cairo': ['var(--font-cairo)', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",

@@ -62,6 +62,7 @@ export function LoginForm() {
               disabled={isLoading}
               className="text-right"
               dir="rtl"
+              autoComplete="username"
             />
           </div>
           <div className="space-y-2">
@@ -76,6 +77,7 @@ export function LoginForm() {
               disabled={isLoading}
               className="text-right"
               dir="rtl"
+              autoComplete="current-password"
             />
           </div>
           {error && (
