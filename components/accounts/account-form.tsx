@@ -21,12 +21,14 @@ import { Loader2 } from "lucide-react"
 interface AccountFormProps {
   account?: Account
   mode: "create" | "edit"
+  initialParentAccounts?: Account[]
 }
 
-export function AccountForm({ account, mode }: AccountFormProps) {
+export function AccountForm({ account, mode, initialParentAccounts = [] }: AccountFormProps) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
-  const [parentAccounts, setParentAccounts] = useState<Account[]>([])
+  const [isInitialLoad, setIsInitialLoad] = useState(true)
+  const [parentAccounts, setParentAccounts] = useState<Account[]>(initialParentAccounts)
 
   const [formData, setFormData] = useState({
     nameAr: account?.nameAr || "",
@@ -43,7 +45,17 @@ export function AccountForm({ account, mode }: AccountFormProps) {
   )
 
   useEffect(() => {
-    fetchParentAccounts()
+    // Only fetch if account type changes after initial load
+    if (!isInitialLoad) {
+      fetchParentAccounts()
+    } else {
+      // Filter initial parent accounts by current account type
+      const filtered = initialParentAccounts.filter(
+        acc => acc.accountType === formData.accountType
+      )
+      setParentAccounts(filtered)
+      setIsInitialLoad(false)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData.accountType])
 
@@ -134,7 +146,9 @@ export function AccountForm({ account, mode }: AccountFormProps) {
               disabled={mode === "edit"}
             >
               <SelectTrigger>
-                <SelectValue />
+                <SelectValue>
+                  {getAccountTypeName(formData.accountType)}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="ASSET">الأصول</SelectItem>
@@ -178,7 +192,13 @@ export function AccountForm({ account, mode }: AccountFormProps) {
                 }
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="اختر الحساب الرئيسي" />
+                  <SelectValue>
+                    {formData.parentId && formData.parentId !== "none"
+                      ? parentAccounts.find(p => p.id === formData.parentId)
+                        ? `${parentAccounts.find(p => p.id === formData.parentId)?.code} - ${parentAccounts.find(p => p.id === formData.parentId)?.nameAr}`
+                        : "بدون حساب رئيسي"
+                      : "بدون حساب رئيسي"}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="none">بدون حساب رئيسي</SelectItem>
@@ -201,7 +221,9 @@ export function AccountForm({ account, mode }: AccountFormProps) {
               }
             >
               <SelectTrigger>
-                <SelectValue />
+                <SelectValue>
+                  {formData.currency === "JOD" ? "دينار أردني (JOD)" : "تيثر (USDT)"}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="JOD">دينار أردني (JOD)</SelectItem>
@@ -241,7 +263,9 @@ export function AccountForm({ account, mode }: AccountFormProps) {
                   disabled={mode === "edit" && account?.hasTransactions}
                 >
                   <SelectTrigger>
-                    <SelectValue />
+                    <SelectValue>
+                      {getBalanceTypeName(formData.openingBalanceType)}
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="DEBIT">مدين</SelectItem>
