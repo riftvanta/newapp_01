@@ -42,11 +42,12 @@ export function AccountsClientImpl({ accounts }: AccountsClientProps) {
   return (
     <>
       <div className="flex flex-col gap-4 mb-6">
-        {/* Header Row with Title and View Toggle */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-          <h1 className="text-2xl font-bold">دليل الحسابات</h1>
+        {/* Title */}
+        <h1 className="text-2xl font-bold">دليل الحسابات</h1>
 
-          {/* View Mode Toggle - positioned next to title */}
+        {/* Controls Row - View Toggle and New Account Button */}
+        <div className="flex items-center gap-3">
+          {/* View Mode Toggle */}
           <div className="flex gap-1 bg-gray-100 dark:bg-gray-800 rounded-md p-1">
             <Button
               variant={viewMode === 'grid' ? 'default' : 'ghost'}
@@ -70,14 +71,11 @@ export function AccountsClientImpl({ accounts }: AccountsClientProps) {
             </Button>
           </div>
 
-          {/* Spacer to push button to the left */}
-          <div className="flex-1" />
-
-          {/* New Account Button - aligned to the left */}
-          <Link href="/dashboard/accounts/new" className="sm:ml-auto">
-            <Button className="h-8 sm:h-10">
+          {/* New Account Button - positioned far left */}
+          <Link href="/dashboard/accounts/new">
+            <Button size="sm" className="h-8">
               <Plus className="h-4 w-4 ml-2" />
-              حساب جديد
+              <span>حساب جديد</span>
             </Button>
           </Link>
         </div>

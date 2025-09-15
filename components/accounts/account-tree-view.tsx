@@ -116,7 +116,7 @@ export function AccountTreeView({ accounts }: AccountTreeViewProps) {
     <div className="space-y-4">
       {/* Search and Controls */}
       <Card className="p-3 sm:p-4 sticky top-0 z-10 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm">
-        <div className="flex flex-col sm:flex-row gap-3">
+        <div className="flex gap-2 sm:gap-3">
           {/* Search Input */}
           <div className="relative flex-1">
             <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -130,27 +130,25 @@ export function AccountTreeView({ accounts }: AccountTreeViewProps) {
             />
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleExpandAll}
-              className="whitespace-nowrap"
-            >
-              {expandAll ? (
-                <>
-                  <Minimize2 className="h-4 w-4 ml-2" />
-                  <span className="hidden sm:inline">طي الكل</span>
-                </>
-              ) : (
-                <>
-                  <Maximize2 className="h-4 w-4 ml-2" />
-                  <span className="hidden sm:inline">توسيع الكل</span>
-                </>
-              )}
-            </Button>
-          </div>
+          {/* Expand/Collapse Button */}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleExpandAll}
+            className="whitespace-nowrap px-2 sm:px-3"
+          >
+            {expandAll ? (
+              <>
+                <Minimize2 className="h-4 w-4 sm:ml-2" />
+                <span className="hidden sm:inline">طي الكل</span>
+              </>
+            ) : (
+              <>
+                <Maximize2 className="h-4 w-4 sm:ml-2" />
+                <span className="hidden sm:inline">توسيع الكل</span>
+              </>
+            )}
+          </Button>
         </div>
 
         {/* Account count */}

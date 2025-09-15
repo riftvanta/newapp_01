@@ -111,7 +111,25 @@ export function AccountTreeNode({
 
             {/* Account Code & Name */}
             <div className="flex-1 min-w-0">
-              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
+              {/* Mobile: Horizontal layout */}
+              <div className="sm:hidden">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-mono text-gray-500 dark:text-gray-400">
+                    {highlightText(account.code)}
+                  </span>
+                  {account.isParent && (
+                    <span className="text-xs bg-primary/10 text-primary px-1.5 py-0.5 rounded">
+                      رئيسي
+                    </span>
+                  )}
+                </div>
+                <div className="text-sm font-medium mt-0.5">
+                  {highlightText(account.nameAr)}
+                </div>
+              </div>
+
+              {/* Desktop: Original layout */}
+              <div className="hidden sm:flex sm:flex-row sm:items-center gap-1 sm:gap-3">
                 <span className="text-xs sm:text-sm font-mono text-gray-500 dark:text-gray-400">
                   {highlightText(account.code)}
                 </span>
@@ -121,21 +139,6 @@ export function AccountTreeNode({
                 {account.isParent && (
                   <span className="inline-flex text-xs bg-primary/10 text-primary px-2 py-0.5 rounded">
                     رئيسي
-                  </span>
-                )}
-              </div>
-
-              {/* Mobile: Balance below name */}
-              <div className="sm:hidden mt-1 flex items-center gap-2 text-xs">
-                <span className={cn(
-                  "font-semibold",
-                  isNegative && "text-red-600 dark:text-red-400"
-                )}>
-                  {formattedAmount}
-                </span>
-                {hasChildren && (
-                  <span className="text-gray-500">
-                    ({children.length} فرعي)
                   </span>
                 )}
               </div>
@@ -176,8 +179,24 @@ export function AccountTreeNode({
             </div>
           </div>
 
-          {/* Mobile Actions Menu */}
-          <div className="sm:hidden">
+          {/* Mobile Balance and Actions */}
+          <div className="sm:hidden flex items-center gap-2">
+            {/* Balance */}
+            <div className="text-left">
+              <div className={cn(
+                "text-sm font-semibold",
+                isNegative && "text-red-600 dark:text-red-400"
+              )}>
+                {formattedAmount}
+              </div>
+              {hasChildren && (
+                <div className="text-xs text-gray-500">
+                  {children.length} فرعي
+                </div>
+              )}
+            </div>
+
+            {/* Actions Menu */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
