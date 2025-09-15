@@ -150,15 +150,21 @@ export function AccountForm({ account, mode }: AccountFormProps) {
           </div>
 
           {mode === "create" && (
-            <div className="flex items-center space-x-2 space-x-reverse">
+            <div className="flex items-center gap-2">
               <Checkbox
                 id="isParent"
                 checked={formData.isParent}
                 onCheckedChange={(checked) =>
                   setFormData({ ...formData, isParent: checked as boolean })
                 }
+                className="data-[state=checked]:bg-primary data-[state=checked]:border-primary"
               />
-              <Label htmlFor="isParent">حساب رئيسي</Label>
+              <Label
+                htmlFor="isParent"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+              >
+                حساب رئيسي
+              </Label>
             </div>
           )}
 
