@@ -45,6 +45,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   pages: {
     signIn: "/login",
+    error: "/login",
   },
   callbacks: {
     async session({ session, token }) {
@@ -55,9 +56,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
     async jwt({ token }) {
       return token
+    },
+    async redirect({ url, baseUrl }) {
+      // Ensure we always redirect to our app's domain
+      if (url.startsWith("/")) return `${baseUrl}${url}`
+      else if (new URL(url).origin === baseUrl) return url
+      return baseUrl
     }
   },
   session: {
-    strategy: "jwt"
-  }
+    strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+  },
+  trustHost: true,
+  debug: process.env.NODE_ENV === "development",
 })
