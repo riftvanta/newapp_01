@@ -1,12 +1,18 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useCallback } from "react"
 import { AccountCard } from "@/components/accounts/account-card"
 import { AccountTreeView } from "@/components/accounts/account-tree-view"
 import { Button } from "@/components/ui/button"
 import { Plus, Grid3x3, TreePine } from "lucide-react"
 import Link from "next/link"
 import { saveViewMode } from "@/lib/account-tree-utils"
+import { useRouter } from "next/navigation"
+import {
+  PullToRefreshContainer,
+  PullToRefreshIndicator,
+  usePullToRefresh,
+} from "@/components/ui/pull-to-refresh"
 import type { Account } from "@prisma/client"
 
 interface AccountsClientProps {
@@ -20,11 +26,32 @@ interface AccountsClientProps {
 }
 
 export function AccountsClientImpl({ accounts, currentPage, totalPages, totalCount }: AccountsClientProps) {
+  const router = useRouter()
+
   // Since this component is only rendered on client-side (no SSR),
   // we can safely read localStorage directly
   const [viewMode, setViewMode] = useState<'grid' | 'tree'>(() => {
     const stored = localStorage.getItem('accountViewMode')
     return stored === 'tree' ? 'tree' : 'grid'
+  })
+
+  // Pull-to-refresh handler
+  const handleRefresh = useCallback(async () => {
+    // Simulate network delay for better UX
+    await new Promise(resolve => setTimeout(resolve, 500))
+
+    // Refresh the page data
+    router.refresh()
+  }, [router])
+
+  const {
+    containerRef,
+    pullDistance,
+    isRefreshing,
+    isTriggered,
+  } = usePullToRefresh({
+    onRefresh: handleRefresh,
+    threshold: 80,
   })
 
   const handleViewModeChange = (mode: 'grid' | 'tree') => {
@@ -43,7 +70,13 @@ export function AccountsClientImpl({ accounts, currentPage, totalPages, totalCou
   }, {} as Record<string, typeof accounts>)
 
   return (
-    <>
+    <PullToRefreshContainer ref={containerRef}>
+      <PullToRefreshIndicator
+        pullDistance={pullDistance}
+        isRefreshing={isRefreshing}
+        isTriggered={isTriggered}
+      />
+
       <div className="flex flex-col gap-4 mb-6">
         {/* Title */}
         <h1 className="text-2xl font-bold">دليل الحسابات</h1>
@@ -218,6 +251,6 @@ export function AccountsClientImpl({ accounts, currentPage, totalPages, totalCou
           <Plus className="h-6 w-6" />
         </Button>
       </Link>
-    </>
+    </PullToRefreshContainer>
   )
 }

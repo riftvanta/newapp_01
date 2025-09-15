@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth"
 import { redirect } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { DashboardLayout } from "@/components/dashboard-layout"
+import { DashboardClient } from "./dashboard-client"
 
 export default async function DashboardPage() {
   const session = await auth()
@@ -12,7 +13,8 @@ export default async function DashboardPage() {
 
   return (
     <DashboardLayout>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
+      <DashboardClient>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
         <Card>
           <CardHeader>
             <CardTitle className="text-lg sm:text-xl md:text-2xl">مرحباً بك في لوحة التحكم</CardTitle>
@@ -55,7 +57,8 @@ export default async function DashboardPage() {
             </div>
           </CardContent>
         </Card>
-      </div>
+        </div>
+      </DashboardClient>
     </DashboardLayout>
   )
 }

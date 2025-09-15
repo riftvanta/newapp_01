@@ -131,4 +131,45 @@
   .nav-active {
     animation: nav-press 0.2s ease-out;
   }
+
+  /* Pull-to-refresh animations */
+  @keyframes pull-spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes pull-bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-4px);
+    }
+  }
+
+  /* Overscroll behavior for pull-to-refresh */
+  .overscroll-y-contain {
+    overscroll-behavior-y: contain;
+  }
+
+  /* Prevent body scroll when pulling */
+  body.pulling {
+    overflow: hidden;
+  }
+
+  /* Smooth elastic transitions */
+  .pull-transition {
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  /* Mobile-only pull-to-refresh */
+  @media (hover: hover) and (pointer: fine) {
+    .pull-to-refresh-indicator {
+      display: none;
+    }
+  }
 }
