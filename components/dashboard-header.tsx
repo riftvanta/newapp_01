@@ -1,6 +1,7 @@
 "use client"
 
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Button } from "@/components/ui/button"
 import { User, LogOut } from "lucide-react"
@@ -27,10 +28,20 @@ export function DashboardHeader() {
   }
 
   const handleLogout = async () => {
-    const response = await fetch("/api/logout", { method: "POST" })
-    if (response.ok) {
-      router.push("/login")
-      router.refresh()
+    try {
+      const response = await fetch("/api/auth/logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+
+      if (response.ok) {
+        router.push("/login")
+        router.refresh()
+      }
+    } catch (error) {
+      console.error("Logout error:", error)
     }
   }
 
