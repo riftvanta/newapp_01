@@ -30,16 +30,16 @@ export function MobileBottomNav() {
       href: "/dashboard",
     },
     {
+      id: "accounts",
+      label: "الحسابات",
+      icon: <FileText className="h-5 w-5" />,
+      href: "/dashboard/accounts",
+    },
+    {
       id: "analytics",
       label: "التحليلات",
       icon: <BarChart3 className="h-5 w-5" />,
       href: "/dashboard/analytics",
-    },
-    {
-      id: "reports",
-      label: "التقارير",
-      icon: <FileText className="h-5 w-5" />,
-      href: "/dashboard/reports",
     },
     {
       id: "users",

@@ -14,3 +14,52 @@ model Admin {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model ExchangeRate {
+  id        String   @id @default(cuid())
+  rate      Decimal  @default(0.71) // 1 USDT = 0.71 JOD
+  updatedAt DateTime @updatedAt
+  updatedBy String?
+}
+
+enum AccountType {
+  ASSET
+  LIABILITY
+  EQUITY
+  REVENUE
+  EXPENSE
+}
+
+enum Currency {
+  JOD
+  USDT
+}
+
+enum BalanceType {
+  DEBIT
+  CREDIT
+}
+
+model Account {
+  id                   String      @id @default(cuid())
+  code                 String      @unique
+  nameAr               String
+  accountType          AccountType
+  parentId             String?
+  parent               Account?    @relation("AccountHierarchy", fields: [parentId], references: [id])
+  children             Account[]   @relation("AccountHierarchy")
+  isParent             Boolean     @default(false)
+  currency             Currency
+  openingBalance       Decimal     @default(0)
+  openingBalanceType   BalanceType?
+  currentBalance       Decimal     @default(0)
+  normalBalance        BalanceType
+  hasTransactions      Boolean     @default(false)
+  createdAt            DateTime    @default(now())
+  updatedAt            DateTime    @updatedAt
+  createdBy            String?
+
+  @@index([accountType])
+  @@index([parentId])
+  @@index([code])
+}
