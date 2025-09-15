@@ -5,12 +5,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Edit } from "lucide-react"
 import Link from "next/link"
-import { PrismaClient } from "@prisma/client"
+import { prisma } from "@/lib/prisma"
 import { formatBalance, getAccountTypeName, getBalanceTypeName } from "@/lib/accounting"
 import { notFound } from "next/navigation"
 import { DeleteAccountButton } from "@/components/accounts/delete-account-button"
-
-const prisma = new PrismaClient()
 
 export default async function AccountDetailsPage({
   params,

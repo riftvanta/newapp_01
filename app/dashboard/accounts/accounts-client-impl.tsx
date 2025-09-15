@@ -12,11 +12,14 @@ import type { Account } from "@prisma/client"
 interface AccountsClientProps {
   accounts: (Account & {
     parent?: Account | null
-    children?: Account[]
+    children?: any[]
   })[]
+  currentPage: number
+  totalPages: number
+  totalCount: number
 }
 
-export function AccountsClientImpl({ accounts }: AccountsClientProps) {
+export function AccountsClientImpl({ accounts, currentPage, totalPages, totalCount }: AccountsClientProps) {
   // Since this component is only rendered on client-side (no SSR),
   // we can safely read localStorage directly
   const [viewMode, setViewMode] = useState<'grid' | 'tree'>(() => {
@@ -98,6 +101,12 @@ export function AccountsClientImpl({ accounts }: AccountsClientProps) {
             </Button>
           </Link>
         </div>
+
+        {/* Pagination Info */}
+        <div className="text-sm text-gray-600 dark:text-gray-400">
+          عرض {accounts.length} من {totalCount} حساب
+          {totalPages > 1 && ` • صفحة ${currentPage} من ${totalPages}`}
+        </div>
       </div>
 
       {accounts.length === 0 ? (
@@ -142,6 +151,62 @@ export function AccountsClientImpl({ accounts }: AccountsClientProps) {
             <AccountTreeView accounts={accounts} />
           )}
         </>
+      )}
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center gap-2 mt-6">
+          <Link
+            href={`?page=${Math.max(1, currentPage - 1)}`}
+            className={`px-3 py-1 rounded-md ${
+              currentPage === 1
+                ? 'bg-gray-100 text-gray-400 cursor-not-allowed pointer-events-none'
+                : 'bg-white hover:bg-gray-50 text-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-300'
+            }`}
+          >
+            السابق
+          </Link>
+
+          <div className="flex gap-1">
+            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+              let pageNum
+              if (totalPages <= 5) {
+                pageNum = i + 1
+              } else if (currentPage <= 3) {
+                pageNum = i + 1
+              } else if (currentPage >= totalPages - 2) {
+                pageNum = totalPages - 4 + i
+              } else {
+                pageNum = currentPage - 2 + i
+              }
+
+              return (
+                <Link
+                  key={pageNum}
+                  href={`?page=${pageNum}`}
+                  className={`px-3 py-1 rounded-md ${
+                    currentPage === pageNum
+                      ? 'bg-primary text-white'
+                      : 'bg-white hover:bg-gray-50 text-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-300'
+                  }`}
+                >
+                  {pageNum}
+                </Link>
+              )
+            })}
+          </div>
+
+          <Link
+            href={`?page=${Math.min(totalPages, currentPage + 1)}`}
+            className={`px-3 py-1 rounded-md ${
+              currentPage === totalPages
+                ? 'bg-gray-100 text-gray-400 cursor-not-allowed pointer-events-none'
+                : 'bg-white hover:bg-gray-50 text-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-300'
+            }`}
+          >
+            التالي
+          </Link>
+        </div>
       )}
 
       {/* Mobile Floating Action Button */}

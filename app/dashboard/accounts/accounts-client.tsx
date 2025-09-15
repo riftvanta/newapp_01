@@ -4,8 +4,11 @@ import type { Account } from "@prisma/client"
 interface AccountsClientProps {
   accounts: (Account & {
     parent?: Account | null
-    children?: Account[]
+    children?: any[]
   })[]
+  currentPage: number
+  totalPages: number
+  totalCount: number
 }
 
 // Dynamically import the client component with SSR disabled

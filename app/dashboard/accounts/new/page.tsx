@@ -2,9 +2,7 @@ import { auth } from "@/lib/auth"
 import { redirect } from "next/navigation"
 import { DashboardLayout } from "@/components/dashboard-layout"
 import { AccountForm } from "@/components/accounts/account-form"
-import { PrismaClient } from "@prisma/client"
-
-const prisma = new PrismaClient()
+import { prisma } from "@/lib/prisma"
 
 export default async function NewAccountPage() {
   const session = await auth()

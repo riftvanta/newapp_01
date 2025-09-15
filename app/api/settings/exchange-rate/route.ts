@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
-import { PrismaClient } from "@prisma/client"
+import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
-
-const prisma = new PrismaClient()
+import { revalidateTag } from "next/cache"
 
 export async function GET(request: NextRequest) {
   try {
@@ -22,6 +21,9 @@ export async function GET(request: NextRequest) {
         }
       })
     }
+
+    // Revalidate exchange rate cache
+    revalidateTag('exchange-rate')
 
     return NextResponse.json(exchangeRate)
   } catch (error) {
@@ -68,6 +70,9 @@ export async function PUT(request: NextRequest) {
         }
       })
     }
+
+    // Revalidate exchange rate cache
+    revalidateTag('exchange-rate')
 
     return NextResponse.json(exchangeRate)
   } catch (error) {

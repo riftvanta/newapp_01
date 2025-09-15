@@ -2,10 +2,8 @@ import { auth } from "@/lib/auth"
 import { redirect } from "next/navigation"
 import { DashboardLayout } from "@/components/dashboard-layout"
 import { AccountForm } from "@/components/accounts/account-form"
-import { PrismaClient } from "@prisma/client"
+import { prisma } from "@/lib/prisma"
 import { notFound } from "next/navigation"
-
-const prisma = new PrismaClient()
 
 export default async function EditAccountPage({
   params,

@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
-import { PrismaClient } from "@prisma/client"
+import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
 import { getNormalBalance, getAccountTypeRange } from "@/lib/accounting"
-
-const prisma = new PrismaClient()
+import { revalidateTag } from "next/cache"
 
 export async function GET(request: NextRequest) {
   try {
@@ -24,12 +23,15 @@ export async function GET(request: NextRequest) {
       where.isParent = true
     }
 
+    // Only include relations if specifically requested
+    const includeRelations = searchParams.get("includeRelations") === "true"
+
     const accounts = await prisma.account.findMany({
       where,
-      include: {
+      include: includeRelations ? {
         parent: true,
         children: true
-      },
+      } : undefined,
       orderBy: [
         { accountType: "asc" },
         { code: "asc" }
@@ -161,6 +163,9 @@ export async function POST(request: NextRequest) {
     if (parentId && openingBalance) {
       await updateParentBalance(parentId)
     }
+
+    // Revalidate accounts cache
+    revalidateTag('accounts')
 
     return NextResponse.json(account, { status: 201 })
   } catch (error) {

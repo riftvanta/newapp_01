@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
-import { PrismaClient } from "@prisma/client"
+import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
-
-const prisma = new PrismaClient()
+import { revalidateTag } from "next/cache"
 
 export async function GET(
   request: NextRequest,
@@ -92,6 +91,9 @@ export async function PUT(
       await updateParentBalance(account.parentId)
     }
 
+    // Revalidate accounts cache
+    revalidateTag('accounts')
+
     return NextResponse.json(account)
   } catch (error) {
     console.error("Error updating account:", error)
@@ -147,6 +149,9 @@ export async function DELETE(
     if (parentId) {
       await updateParentBalance(parentId)
     }
+
+    // Revalidate accounts cache
+    revalidateTag('accounts')
 
     return NextResponse.json({ message: "تم حذف الحساب بنجاح" })
   } catch (error) {

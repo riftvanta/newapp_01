@@ -3,9 +3,7 @@ import { redirect } from "next/navigation"
 import { DashboardLayout } from "@/components/dashboard-layout"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ExchangeRateForm } from "@/components/settings/exchange-rate-form"
-import { PrismaClient } from "@prisma/client"
-
-const prisma = new PrismaClient()
+import { prisma } from "@/lib/prisma"
 
 export default async function SettingsPage() {
   const session = await auth()
