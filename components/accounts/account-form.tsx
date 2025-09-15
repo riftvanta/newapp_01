@@ -128,6 +128,7 @@ export function AccountForm({ account, mode, initialParentAccounts = [] }: Accou
             <Label htmlFor="nameAr">اسم الحساب (بالعربية)</Label>
             <Input
               id="nameAr"
+              name="nameAr"
               value={formData.nameAr}
               onChange={(e) => setFormData({ ...formData, nameAr: e.target.value })}
               required
@@ -139,13 +140,14 @@ export function AccountForm({ account, mode, initialParentAccounts = [] }: Accou
           <div>
             <Label htmlFor="accountType">نوع الحساب</Label>
             <Select
+              name="accountType"
               value={formData.accountType}
               onValueChange={(value: AccountType) =>
                 setFormData({ ...formData, accountType: value })
               }
               disabled={mode === "edit"}
             >
-              <SelectTrigger>
+              <SelectTrigger id="accountType">
                 <SelectValue>
                   {getAccountTypeName(formData.accountType)}
                 </SelectValue>
@@ -167,6 +169,7 @@ export function AccountForm({ account, mode, initialParentAccounts = [] }: Accou
             <div className="flex items-center gap-2">
               <Checkbox
                 id="isParent"
+                name="isParent"
                 checked={formData.isParent}
                 onCheckedChange={(checked) =>
                   setFormData({ ...formData, isParent: checked as boolean })
@@ -186,12 +189,13 @@ export function AccountForm({ account, mode, initialParentAccounts = [] }: Accou
             <div>
               <Label htmlFor="parentId">الحساب الرئيسي (اختياري)</Label>
               <Select
+                name="parentId"
                 value={formData.parentId || "none"}
                 onValueChange={(value) =>
                   setFormData({ ...formData, parentId: value === "none" ? "" : value })
                 }
               >
-                <SelectTrigger>
+                <SelectTrigger id="parentId">
                   <SelectValue>
                     {formData.parentId && formData.parentId !== "none"
                       ? parentAccounts.find(p => p.id === formData.parentId)
@@ -215,12 +219,13 @@ export function AccountForm({ account, mode, initialParentAccounts = [] }: Accou
           <div>
             <Label htmlFor="currency">العملة</Label>
             <Select
+              name="currency"
               value={formData.currency}
               onValueChange={(value: Currency) =>
                 setFormData({ ...formData, currency: value })
               }
             >
-              <SelectTrigger>
+              <SelectTrigger id="currency">
                 <SelectValue>
                   {formData.currency === "JOD" ? "دينار أردني (JOD)" : "تيثر (USDT)"}
                 </SelectValue>
@@ -238,6 +243,7 @@ export function AccountForm({ account, mode, initialParentAccounts = [] }: Accou
                 <Label htmlFor="openingBalance">الرصيد الافتتاحي</Label>
                 <Input
                   id="openingBalance"
+                  name="openingBalance"
                   type="number"
                   step="0.01"
                   value={formData.openingBalance}
@@ -256,13 +262,14 @@ export function AccountForm({ account, mode, initialParentAccounts = [] }: Accou
               <div>
                 <Label htmlFor="openingBalanceType">نوع الرصيد الافتتاحي</Label>
                 <Select
+                  name="openingBalanceType"
                   value={formData.openingBalanceType}
                   onValueChange={(value: BalanceType) =>
                     setFormData({ ...formData, openingBalanceType: value })
                   }
                   disabled={mode === "edit" && account?.hasTransactions}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger id="openingBalanceType">
                     <SelectValue>
                       {getBalanceTypeName(formData.openingBalanceType)}
                     </SelectValue>
