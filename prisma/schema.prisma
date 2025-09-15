@@ -41,25 +41,96 @@ enum BalanceType {
 }
 
 model Account {
-  id                   String      @id @default(cuid())
-  code                 String      @unique
+  id                   String               @id @default(cuid())
+  code                 String               @unique
   nameAr               String
   accountType          AccountType
   parentId             String?
-  parent               Account?    @relation("AccountHierarchy", fields: [parentId], references: [id])
-  children             Account[]   @relation("AccountHierarchy")
-  isParent             Boolean     @default(false)
+  parent               Account?             @relation("AccountHierarchy", fields: [parentId], references: [id])
+  children             Account[]            @relation("AccountHierarchy")
+  isParent             Boolean              @default(false)
   currency             Currency
-  openingBalance       Decimal     @default(0)
+  openingBalance       Decimal              @default(0)
   openingBalanceType   BalanceType?
-  currentBalance       Decimal     @default(0)
+  currentBalance       Decimal              @default(0)
   normalBalance        BalanceType
-  hasTransactions      Boolean     @default(false)
-  createdAt            DateTime    @default(now())
-  updatedAt            DateTime    @updatedAt
+  hasTransactions      Boolean              @default(false)
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt
   createdBy            String?
+
+  // Relations to journal system
+  journalEntryLines    JournalEntryLine[]
+  transactions         Transaction[]
 
   @@index([accountType])
   @@index([parentId])
   @@index([code])
+}
+
+enum JournalStatus {
+  POSTED
+  VOIDED
+}
+
+model JournalEntry {
+  id                String             @id @default(cuid())
+  entryNumber       Int                @unique @default(autoincrement())
+  date              DateTime           @default(now())
+  description       String
+  reference         String?
+  status            JournalStatus      @default(POSTED)
+  totalDebitsJOD    Decimal            @default(0)
+  totalCreditsJOD   Decimal            @default(0)
+  totalDebitsUSDT   Decimal            @default(0)
+  totalCreditsUSDT  Decimal            @default(0)
+  createdBy         String
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+
+  // Relations
+  lines             JournalEntryLine[]
+  transactions      Transaction[]
+
+  @@index([date])
+  @@index([status])
+  @@index([entryNumber])
+}
+
+model JournalEntryLine {
+  id                String        @id @default(cuid())
+  journalEntryId    String
+  journalEntry      JournalEntry  @relation(fields: [journalEntryId], references: [id], onDelete: Cascade)
+  accountId         String
+  account           Account       @relation(fields: [accountId], references: [id])
+  debitAmount       Decimal       @default(0)
+  creditAmount      Decimal       @default(0)
+  currency          Currency
+  exchangeRate      Decimal       // Snapshot of exchange rate at time of entry
+  convertedAmountJOD Decimal      // Amount converted to JOD for reporting
+  description       String?
+
+  @@index([journalEntryId])
+  @@index([accountId])
+}
+
+model Transaction {
+  id                String        @id @default(cuid())
+  journalEntryId    String
+  journalEntry      JournalEntry  @relation(fields: [journalEntryId], references: [id], onDelete: Cascade)
+  accountId         String
+  account           Account       @relation(fields: [accountId], references: [id])
+  date              DateTime
+  amount            Decimal
+  type              BalanceType   // DEBIT or CREDIT
+  currency          Currency
+  exchangeRate      Decimal
+  balanceBefore     Decimal
+  balanceAfter      Decimal
+  description       String?
+  createdAt         DateTime      @default(now())
+
+  @@index([accountId, date])
+  @@index([journalEntryId])
+  @@index([date])
 }

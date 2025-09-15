@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
-import { Home, BarChart3, Settings, FileText, Users } from "lucide-react"
+import { Home, BarChart3, Settings, FileText, Users, Calculator } from "lucide-react"
 
 interface NavItem {
   id: string
@@ -36,16 +36,10 @@ export function MobileBottomNav() {
       href: "/dashboard/accounts",
     },
     {
-      id: "analytics",
-      label: "التحليلات",
-      icon: <BarChart3 className="h-5 w-5" />,
-      href: "/dashboard/analytics",
-    },
-    {
-      id: "users",
-      label: "المستخدمون",
-      icon: <Users className="h-5 w-5" />,
-      href: "/dashboard/users",
+      id: "journal",
+      label: "القيود",
+      icon: <Calculator className="h-5 w-5" />,
+      href: "/dashboard/journal",
     },
     {
       id: "settings",

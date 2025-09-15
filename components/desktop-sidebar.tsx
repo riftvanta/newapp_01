@@ -41,10 +41,10 @@ export function DesktopSidebar() {
       href: "/dashboard/accounts",
     },
     {
-      id: "transactions",
-      label: "القيود المحاسبية",
+      id: "journal",
+      label: "قيود اليومية",
       icon: <Calculator className="h-5 w-5" />,
-      href: "/dashboard/transactions",
+      href: "/dashboard/journal",
     },
     {
       id: "reports",
