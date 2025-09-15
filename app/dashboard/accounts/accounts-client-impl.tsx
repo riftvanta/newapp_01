@@ -46,36 +46,55 @@ export function AccountsClientImpl({ accounts }: AccountsClientProps) {
         <h1 className="text-2xl font-bold">دليل الحسابات</h1>
 
         {/* Controls Row - View Toggle and New Account Button */}
-        <div className="flex items-center gap-3">
-          {/* View Mode Toggle */}
-          <div className="flex gap-1 bg-gray-100 dark:bg-gray-800 rounded-md p-1">
-            <Button
-              variant={viewMode === 'grid' ? 'default' : 'ghost'}
-              size="sm"
+        <div className="flex items-center gap-2 sm:gap-3">
+          {/* View Mode Toggle - Enhanced for mobile */}
+          <div className="flex gap-1 bg-gradient-to-b from-gray-100 to-gray-150 dark:from-gray-800 dark:to-gray-850 rounded-lg p-1 shadow-sm border border-gray-200 dark:border-gray-700">
+            <button
+              type="button"
               onClick={() => handleViewModeChange('grid')}
-              className="h-8 px-2 sm:px-3"
+              className={`
+                h-10 px-3 sm:h-8 sm:px-3
+                rounded-md font-medium text-sm
+                inline-flex items-center justify-center gap-2
+                transition-all duration-200
+                ${viewMode === 'grid'
+                  ? 'shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white scale-105'
+                  : 'bg-transparent hover:bg-white/50 dark:hover:bg-gray-700/50 text-gray-700 dark:text-gray-300'
+                }
+              `}
               aria-label="عرض شبكي"
             >
-              <Grid3x3 className="h-4 w-4" />
-              <span className="hidden sm:inline mr-2">شبكة</span>
-            </Button>
-            <Button
-              variant={viewMode === 'tree' ? 'default' : 'ghost'}
-              size="sm"
+              <Grid3x3 className="h-5 w-5 sm:h-4 sm:w-4" />
+              <span className="hidden sm:inline">شبكة</span>
+            </button>
+            <button
+              type="button"
               onClick={() => handleViewModeChange('tree')}
-              className="h-8 px-2 sm:px-3"
+              className={`
+                h-10 px-3 sm:h-8 sm:px-3
+                rounded-md font-medium text-sm
+                inline-flex items-center justify-center gap-2
+                transition-all duration-200
+                ${viewMode === 'tree'
+                  ? 'shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white scale-105'
+                  : 'bg-transparent hover:bg-white/50 dark:hover:bg-gray-700/50 text-gray-700 dark:text-gray-300'
+                }
+              `}
               aria-label="عرض شجري"
             >
-              <TreePine className="h-4 w-4" />
-              <span className="hidden sm:inline mr-2">شجرة</span>
-            </Button>
+              <TreePine className="h-5 w-5 sm:h-4 sm:w-4" />
+              <span className="hidden sm:inline">شجرة</span>
+            </button>
           </div>
 
-          {/* New Account Button - positioned far left */}
+          {/* New Account Button - Enhanced for mobile */}
           <Link href="/dashboard/accounts/new">
-            <Button size="sm" className="h-8">
-              <Plus className="h-4 w-4 ml-2" />
-              <span>حساب جديد</span>
+            <Button
+              size="sm"
+              className="h-10 px-4 sm:h-8 sm:px-3 font-medium shadow-sm hover:shadow-md transition-all duration-200 bg-gradient-to-b from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80"
+            >
+              <Plus className="h-5 w-5 sm:h-4 sm:w-4 ml-2" />
+              <span className="text-sm sm:text-sm">حساب جديد</span>
             </Button>
           </Link>
         </div>
