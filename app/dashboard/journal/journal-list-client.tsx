@@ -14,8 +14,6 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Plus, Search, Edit, Trash2, FileText, Filter } from "lucide-react"
-import { format } from "date-fns"
-import { ar } from "date-fns/locale"
 
 interface JournalListClientProps {
   initialEntries: any[]
@@ -95,8 +93,10 @@ export function JournalListClient({ initialEntries, initialTotal }: JournalListC
     router.refresh()
   }
 
-  const formatCurrency = (amount: number, currency: string) => {
-    return `${amount.toFixed(2)} ${currency}`
+  const formatCurrency = (amount: any, currency: string) => {
+    // Convert Decimal object to number if needed
+    const numAmount = typeof amount === 'object' ? parseFloat(amount.toString()) : parseFloat(amount)
+    return `${numAmount.toFixed(2)} ${currency}`
   }
 
   return (
@@ -184,7 +184,7 @@ export function JournalListClient({ initialEntries, initialTotal }: JournalListC
                       )}
                     </div>
                     <p className="text-sm text-muted-foreground mb-1">
-                      {format(new Date(entry.date), "dd MMMM yyyy", { locale: ar })}
+                      {new Date(entry.date).toLocaleDateString()}
                     </p>
                     <p className="font-medium">{entry.description}</p>
                     {entry.reference && (

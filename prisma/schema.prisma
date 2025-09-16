@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -75,7 +75,7 @@ enum JournalStatus {
 
 model JournalEntry {
   id                String             @id @default(cuid())
-  entryNumber       Int                @unique @default(autoincrement())
+  entryNumber       Int                @unique
   date              DateTime           @default(now())
   description       String
   reference         String?
@@ -100,7 +100,7 @@ model JournalEntry {
 model JournalEntryLine {
   id                String        @id @default(cuid())
   journalEntryId    String
-  journalEntry      JournalEntry  @relation(fields: [journalEntryId], references: [id], onDelete: Cascade)
+  journalEntry      JournalEntry  @relation(fields: [journalEntryId], references: [id])
   accountId         String
   account           Account       @relation(fields: [accountId], references: [id])
   debitAmount       Decimal       @default(0)
@@ -117,7 +117,7 @@ model JournalEntryLine {
 model Transaction {
   id                String        @id @default(cuid())
   journalEntryId    String
-  journalEntry      JournalEntry  @relation(fields: [journalEntryId], references: [id], onDelete: Cascade)
+  journalEntry      JournalEntry  @relation(fields: [journalEntryId], references: [id])
   accountId         String
   account           Account       @relation(fields: [accountId], references: [id])
   date              DateTime
@@ -130,7 +130,7 @@ model Transaction {
   description       String?
   createdAt         DateTime      @default(now())
 
-  @@index([accountId, date])
+  @@index([accountId])
   @@index([journalEntryId])
   @@index([date])
 }

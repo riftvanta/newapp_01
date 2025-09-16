@@ -1,7 +1,7 @@
 import { auth } from "@/lib/auth"
 import { redirect } from "next/navigation"
 import { DashboardLayout } from "@/components/dashboard-layout"
-import { JournalListClient } from "./journal-list-client"
+import { JournalListSimple } from "./journal-list-simple"
 import { getJournalEntries } from "@/lib/journal"
 
 export default async function JournalPage() {
@@ -13,13 +13,12 @@ export default async function JournalPage() {
 
   // Fetch initial journal entries
   const { entries, total } = await getJournalEntries({
-    take: 20,
-    status: "POSTED" // Only show posted entries by default
+    take: 50 // Get more entries at once
   })
 
   return (
     <DashboardLayout>
-      <JournalListClient initialEntries={entries} initialTotal={total} />
+      <JournalListSimple initialEntries={entries} initialTotal={total} />
     </DashboardLayout>
   )
 }

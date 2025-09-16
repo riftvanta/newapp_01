@@ -102,9 +102,16 @@ export async function createJournalEntry(input: CreateJournalEntryInput) {
 
   // Start transaction
   return await prisma.$transaction(async (tx) => {
+    // Get the next entry number
+    const lastEntry = await tx.journalEntry.findFirst({
+      orderBy: { entryNumber: "desc" }
+    })
+    const nextEntryNumber = (lastEntry?.entryNumber || 0) + 1
+
     // Create the journal entry
     const journalEntry = await tx.journalEntry.create({
       data: {
+        entryNumber: nextEntryNumber,
         date: input.date,
         description: input.description,
         reference: input.reference,
